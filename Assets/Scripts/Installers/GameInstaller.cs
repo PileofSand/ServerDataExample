@@ -15,10 +15,10 @@ public class GameInstaller : MonoInstaller
     public override void InstallBindings()
     {
         Container.Bind<IDataServer>().To<DataServerMock>().AsSingle();
-        Container.Bind<ISelectionView>().FromComponentInHierarchy().AsSingle();
         Container.Bind<GenericObjectPool<ItemEntity>>().AsSingle()
             .WithArguments(itemPrefab, 5, itemContainer);
+        Container.BindInterfacesAndSelfTo<SelectionModel>().AsSingle().NonLazy();
         Container.BindInterfacesAndSelfTo<SelectionController>().AsSingle().NonLazy();
-        Container.BindInterfacesAndSelfTo<SelectionModel>().AsSingle().NonLazy();;
+        Container.Bind<ISelectionView>().FromComponentInHierarchy().AsSingle();
     }
 }

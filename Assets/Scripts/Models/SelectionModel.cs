@@ -11,8 +11,8 @@ namespace FunCraftersTask.Models
     public class SelectionModel : IInitializable, IDisposable
     {
         private List<DataItem> _items;
-        private readonly IDataServer _dataServer;
-        private Dictionary<int, List<DataItem>> _pageCache = new Dictionary<int, List<DataItem>>();
+        private IDataServer _dataServer;
+        private Dictionary<int, List<DataItem>> _pageCache;
         private CancellationTokenSource _cts;
         private const int PageSize = 5;
         
@@ -20,7 +20,8 @@ namespace FunCraftersTask.Models
         public int CurrentPageIndex { get; private set; } = 0;
         public int TotalItems { get; private set; }
 
-        public SelectionModel(IDataServer dataServer)
+        [Inject]
+        public void Construct(IDataServer dataServer)
         {
             _dataServer = dataServer;
         }
@@ -54,28 +55,21 @@ namespace FunCraftersTask.Models
         {
             return _items;
         }
-        
-        public void SetTotalItems(int itemsNumber)
-        {
-            TotalItems = itemsNumber;
-        }
 
         public async Task LoadPage(int pageIndex)
         {
             try
             {
-                List<DataItem> items;
                 if (!IsPageCached(pageIndex))
                 {
-                    items = await _dataServer.RequestData(pageIndex * PageSize, PageSize, _cts.Token) as List<DataItem>;
-                    CachePage(pageIndex, items);
+                    _items = await _dataServer.RequestData(pageIndex * PageSize, PageSize, _cts.Token) as List<DataItem>;
+                    CachePage(pageIndex, _items);
                 }
                 else
                 {
-                    items = GetCachedPage(pageIndex);
+                    _items = GetCachedPage(pageIndex);
                 }
-
-                SetItems(items);
+                
                 SetPageIndex(pageIndex);
                 PrefetchNextPage(pageIndex);
             }
@@ -93,17 +87,17 @@ namespace FunCraftersTask.Models
             }
         }
         
+        private void SetTotalItems(int itemsNumber)
+        {
+            TotalItems = itemsNumber;
+        }
+        
         private void SetPageIndex(int index)
         {
             if (index >= 0 && index < TotalPages)
             {
                 CurrentPageIndex = index;
             }
-        }
-
-        private void SetItems(List<DataItem> items)
-        {
-            _items = items;
         }
 
         private bool IsPageCached(int pageIndex)
