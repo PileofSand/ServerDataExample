@@ -72,8 +72,18 @@ namespace FunCraftersTask.Controllers
         {
             try
             {
-                var items = await _dataServer.RequestData(pageIndex * PageSize, PageSize, CancellationToken.None);
-                _model.SetItems(items.ToList());
+                List<DataItem> items;
+                if (_model.GetCachedPage(pageIndex) == null)
+                {
+                    items = await _dataServer.RequestData(pageIndex * PageSize, PageSize, CancellationToken.None) as List<DataItem>;
+                    _model.CachePage(pageIndex, items.ToList());
+                }
+                else
+                {
+                    items = _model.GetCachedPage(pageIndex);
+                }
+
+                _model.SetItems(items);
                 _model.SetPageIndex(pageIndex);
                 UpdateView();
             }

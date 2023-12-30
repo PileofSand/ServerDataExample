@@ -6,6 +6,7 @@ namespace FunCraftersTask.Models
     public class SelectionModel
     {
         private List<DataItem> _items;
+        private Dictionary<int, List<DataItem>> _pageCache = new Dictionary<int, List<DataItem>>();
         private const int PageSize = 5;
         
         public int TotalPages => TotalItems / PageSize;
@@ -30,7 +31,16 @@ namespace FunCraftersTask.Models
             }
         }
         
-
+        public void CachePage(int pageIndex, List<DataItem> items)
+        {
+            _pageCache[pageIndex] = items;
+        }
+        
+        public List<DataItem> GetCachedPage(int pageIndex)
+        {
+            return _pageCache.TryGetValue(pageIndex, out var items) ? items : null;
+        }
+        
         public void SetItems(List<DataItem> items)
         {
             _items = items;
