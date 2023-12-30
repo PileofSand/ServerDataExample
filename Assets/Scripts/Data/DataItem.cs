@@ -1,20 +1,23 @@
-﻿public class DataItem
+﻿namespace FunCraftersTask
 {
-	public enum CategoryType
-	{
-		RED,
-		GREEN,
-		BLUE
-	}
+    public class DataItem
+    {
+        public enum CategoryType
+        {
+            RED,
+            GREEN,
+            BLUE
+        }
 
-	public readonly CategoryType Category;
-	public readonly string Description;
-	public readonly bool Special;
+        public readonly CategoryType Category;
+        public readonly string Description;
+        public readonly bool Special;
 
-	public DataItem(CategoryType category, string description, bool special)
-	{
-		Category = category;
-		Description = description;
-		Special = special;
-	}
+        public DataItem(CategoryType category, string description, bool special)
+        {
+            Category = category;
+            Description = description;
+            Special = special;
+        }
+    }
 }

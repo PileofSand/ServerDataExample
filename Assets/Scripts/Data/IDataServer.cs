@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using FunCraftersTask;
 
-public interface IDataServer
+namespace FunCraftersTask.Services.Server
 {
-	Task<int> DataAvailable(CancellationToken ct);
-	Task<IList<DataItem>> RequestData(int index, int count, CancellationToken ct);
+	public interface IDataServer
+	{
+		Task<int> DataAvailable(CancellationToken ct);
+		Task<IList<DataItem>> RequestData(int index, int count, CancellationToken ct);
+	}
 }

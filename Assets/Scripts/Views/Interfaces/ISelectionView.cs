@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using UniRx;
 
 namespace FunCraftersTask.Views
 {
     public interface ISelectionView
     {
-        event Action<int> OnPageChanged;
-        void DisplayItems(IList<DataItem> items);
-        void SetNavigationButtons(bool showNext, bool showPrevious);
+        IObservable<Unit> OnNextClicked { get; }
+        IObservable<Unit> OnPreviousClicked { get; }
+        void DisplayItems(IEnumerable<DataItem> items);
     }
 }
