@@ -1,6 +1,7 @@
 using UniRx;
 using Zenject;
 using System;
+using System.Threading.Tasks;
 using FunCraftersTask.Models;
 using FunCraftersTask.Views;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace FunCraftersTask.Controllers
             try
             {
                 await _model.InitializeAsync();
-                await _model.LoadPage(0);
+                await LoadPage(0);
                 UpdateView();
             }
             catch (Exception e)
@@ -47,8 +48,7 @@ namespace FunCraftersTask.Controllers
         {
             if ((_model.CurrentPageIndex + 1) * PageSize < _model.TotalItems)
             {
-                await _model.LoadPage(_model.CurrentPageIndex + 1);
-                UpdateView();
+                await LoadPage(_model.CurrentPageIndex + 1);
             }
         }
 
@@ -56,8 +56,25 @@ namespace FunCraftersTask.Controllers
         {
             if (_model.CurrentPageIndex > 0)
             {
-                await _model.LoadPage(_model.CurrentPageIndex - 1);
+                await LoadPage(_model.CurrentPageIndex - 1);
+            }
+        }
+        
+        public async Task LoadPage(int pageIndex)
+        {
+            try
+            {
+                _view.SetLoadingIconActive(true);
+                await _model.LoadPage(pageIndex);
                 UpdateView();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Error loading page {pageIndex}: {e.Message}");
+            }
+            finally
+            {
+                _view.SetLoadingIconActive(false);
             }
         }
 

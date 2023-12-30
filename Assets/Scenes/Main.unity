@@ -1270,6 +1270,7 @@ MonoBehaviour:
   _previousButton: {fileID: 3103496256698558116}
   _itemContainer: {fileID: 6855227151474159798}
   _itemPrefab: {fileID: 5958183624793801515, guid: 931ab9bc18ba24a4dbbb09ecc32834bf, type: 3}
+  _loadingIcon: {fileID: 939919131}
 --- !u!224 &6855227151474159798
 RectTransform:
   m_ObjectHideFlags: 0

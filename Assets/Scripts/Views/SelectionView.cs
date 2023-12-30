@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UniRx;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using FunCraftersTask.Entities;
 using FunCraftersTask.Utilities;
 
@@ -15,8 +16,9 @@ namespace FunCraftersTask.Views
         [SerializeField] private Button _previousButton;
         [SerializeField] private Transform _itemContainer;
         [SerializeField] private ItemEntity _itemPrefab;
-
-        [SerializeField] private GenericObjectPool<ItemEntity> _itemPool;
+        [SerializeField] private GameObject _loadingIcon;
+        
+        private GenericObjectPool<ItemEntity> _itemPool;
 
         public IObservable<Unit> OnNextClicked => _nextButton.OnClickAsObservable();
         public IObservable<Unit> OnPreviousClicked => _previousButton.OnClickAsObservable();
@@ -53,6 +55,23 @@ namespace FunCraftersTask.Views
 
             _previousButton.interactable = currentPage > 0;
             _nextButton.interactable = currentPage < totalPages - 1;
+        }
+        
+        public void SetLoadingIconActive(bool isActive)
+        {
+            _loadingIcon.SetActive(isActive);
+            if (isActive)
+            {
+                // Start rotating animation
+                _loadingIcon.transform.DORotate(new Vector3(0, 0, 360), 1, RotateMode.FastBeyond360)
+                    .SetLoops(-1, LoopType.Incremental)
+                    .SetEase(Ease.Linear);
+            }
+            else
+            {
+                // Stop rotating animation
+                DOTween.Kill(_loadingIcon.transform);
+            }
         }
     }
 }
