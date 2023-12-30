@@ -1,26 +1,19 @@
-using UniRx;
-using Zenject;
 using System;
 using System.Threading.Tasks;
 using FunCraftersTask.Models;
 using FunCraftersTask.Views;
+using UniRx;
 using UnityEngine;
+using Zenject;
 
 namespace FunCraftersTask.Controllers
 {
     public class SelectionController : IInitializable
     {
-        private ISelectionView _view;
-        private SelectionModel _model;
         private const int PageSize = 5;
+        private SelectionModel _model;
         private int _totalItems;
-
-        [Inject]
-        public void Construct(ISelectionView view, SelectionModel model)
-        {
-            _view = view;
-            _model = model;
-        }
+        private ISelectionView _view;
 
         public void Initialize()
         {
@@ -28,6 +21,13 @@ namespace FunCraftersTask.Controllers
             _view.OnPreviousClicked.Subscribe(_ => LoadPreviousPage());
 
             InitializeAsync();
+        }
+
+        [Inject]
+        public void Construct(ISelectionView view, SelectionModel model)
+        {
+            _view = view;
+            _model = model;
         }
 
         private async void InitializeAsync()
@@ -40,27 +40,22 @@ namespace FunCraftersTask.Controllers
             }
             catch (Exception e)
             {
-                Debug.LogError($"Error initializing data: {e.Message}");
+                Debug.LogError($"Error initializing first page and view: {e.Message}");
             }
         }
 
         private async void LoadNextPage()
         {
             if ((_model.CurrentPageIndex + 1) * PageSize < _model.TotalItems)
-            {
                 await LoadPage(_model.CurrentPageIndex + 1);
-            }
         }
 
         private async void LoadPreviousPage()
         {
-            if (_model.CurrentPageIndex > 0)
-            {
-                await LoadPage(_model.CurrentPageIndex - 1);
-            }
+            if (_model.CurrentPageIndex > 0) await LoadPage(_model.CurrentPageIndex - 1);
         }
-        
-        public async Task LoadPage(int pageIndex)
+
+        private async Task LoadPage(int pageIndex)
         {
             try
             {
@@ -80,7 +75,7 @@ namespace FunCraftersTask.Controllers
 
         private void UpdateView()
         {
-            _view.DisplayItems(_model.GetCurrentPageItems(),_model.CurrentPageIndex, _model.TotalPages);
+            _view.DisplayItems(_model.GetCurrentPageItems(), _model.CurrentPageIndex, _model.TotalPages);
         }
     }
 }

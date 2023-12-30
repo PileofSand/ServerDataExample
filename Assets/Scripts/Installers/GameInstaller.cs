@@ -1,11 +1,11 @@
-using Zenject;
-using FunCraftersTask.Services.Server;
-using FunCraftersTask.Views;
 using FunCraftersTask.Controllers;
 using FunCraftersTask.Entities;
 using FunCraftersTask.Models;
+using FunCraftersTask.Services.Server;
 using FunCraftersTask.Utilities;
+using FunCraftersTask.Views;
 using UnityEngine;
+using Zenject;
 
 namespace FunCraftersTask.DependencyInjection
 {
