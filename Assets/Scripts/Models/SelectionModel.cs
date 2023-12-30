@@ -12,7 +12,7 @@ namespace FunCraftersTask.Models
     {
         private List<DataItem> _items;
         private IDataServer _dataServer;
-        private Dictionary<int, List<DataItem>> _pageCache;
+        private Dictionary<int, List<DataItem>> _pageCache = new Dictionary<int, List<DataItem>>();
         private CancellationTokenSource _cts;
         private const int PageSize = 5;
         
@@ -28,8 +28,8 @@ namespace FunCraftersTask.Models
         
         public void Initialize()
         {
-            InitializeAsync();
             _cts = new CancellationTokenSource();
+            InitializeAsync();
         }
         
         public void Dispose()
@@ -60,15 +60,7 @@ namespace FunCraftersTask.Models
         {
             try
             {
-                if (!IsPageCached(pageIndex))
-                {
-                    _items = await _dataServer.RequestData(pageIndex * PageSize, PageSize, _cts.Token) as List<DataItem>;
-                    CachePage(pageIndex, _items);
-                }
-                else
-                {
-                    _items = GetCachedPage(pageIndex);
-                }
+                await GetItemsAsync(pageIndex);
                 
                 SetPageIndex(pageIndex);
                 PrefetchNextPage(pageIndex);
@@ -79,11 +71,24 @@ namespace FunCraftersTask.Models
             }
         }
 
+        private async Task GetItemsAsync(int pageIndex)
+        {
+            if (!IsPageCached(pageIndex))
+            {
+                _items = await _dataServer.RequestData(pageIndex * PageSize, PageSize, _cts.Token) as List<DataItem>;
+                CachePage(pageIndex, _items);
+            }
+            else
+            {
+                _items = GetCachedPage(pageIndex);
+            }
+        }
+
         private void PrefetchNextPage(int pageIndex)
         {
-            if ((pageIndex + 1) * PageSize < TotalItems)
+            if ((pageIndex + 1) * PageSize < TotalItems && !IsPageCached(pageIndex+1))
             {
-                LoadPage(pageIndex + 1);
+                GetItemsAsync(pageIndex + 1);
             }
         }
         

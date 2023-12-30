@@ -34,6 +34,7 @@ namespace FunCraftersTask.Controllers
             try
             {
                 await _model.LoadPage(0);
+                UpdateView();
             }
             catch (Exception e)
             {

@@ -7,18 +7,21 @@ using FunCraftersTask.Models;
 using FunCraftersTask.Utilities;
 using UnityEngine;
 
-public class GameInstaller : MonoInstaller
+namespace FunCraftersTask.DependencyInjection
 {
-    public ItemEntity itemPrefab;
-    public Transform itemContainer;
-
-    public override void InstallBindings()
+    public class GameInstaller : MonoInstaller
     {
-        Container.Bind<IDataServer>().To<DataServerMock>().AsSingle();
-        Container.Bind<GenericObjectPool<ItemEntity>>().AsSingle()
-            .WithArguments(itemPrefab, 5, itemContainer);
-        Container.BindInterfacesAndSelfTo<SelectionModel>().AsSingle().NonLazy();
-        Container.BindInterfacesAndSelfTo<SelectionController>().AsSingle().NonLazy();
-        Container.Bind<ISelectionView>().FromComponentInHierarchy().AsSingle();
+        public ItemEntity itemPrefab;
+        public Transform itemContainer;
+
+        public override void InstallBindings()
+        {
+            Container.Bind<IDataServer>().To<DataServerMock>().AsSingle();
+            Container.BindInterfacesAndSelfTo<SelectionModel>().AsSingle().NonLazy();
+            Container.Bind<GenericObjectPool<ItemEntity>>().AsSingle()
+                .WithArguments(itemPrefab, 5, itemContainer);
+            Container.BindInterfacesAndSelfTo<SelectionController>().AsSingle().NonLazy();
+            Container.Bind<ISelectionView>().FromComponentInHierarchy().AsSingle();
+        }
     }
 }
