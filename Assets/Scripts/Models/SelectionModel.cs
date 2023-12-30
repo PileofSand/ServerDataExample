@@ -93,9 +93,9 @@ namespace FunCraftersTask.Models
 
         private void PrefetchNextPage(int pageIndex)
         {
+            //Fetching next page in advance, we could load all data at once on initialize but what if there is a lot of data in the future. Solution varies here.
             if ((pageIndex + 1) * PageSize < TotalItems && !IsPageCached(pageIndex + 1))
             {
-                // Fire and forget
                 Task.Run(async () => await SafeGetItemsAsync(pageIndex + 1));
             }
         }
