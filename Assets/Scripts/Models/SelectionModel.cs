@@ -7,7 +7,8 @@ namespace FunCraftersTask.Models
     {
         private List<DataItem> _items;
         private const int PageSize = 5;
-        private int TotalPages => (TotalItems + PageSize - 1) / PageSize;
+        
+        public int TotalPages => TotalItems / PageSize;
         public int CurrentPageIndex { get; private set; } = 0;
         public int TotalItems { get; private set; }
 
@@ -28,6 +29,7 @@ namespace FunCraftersTask.Models
                 CurrentPageIndex = index;
             }
         }
+        
 
         public void SetItems(List<DataItem> items)
         {

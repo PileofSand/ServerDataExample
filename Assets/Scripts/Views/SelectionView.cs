@@ -27,7 +27,7 @@ namespace FunCraftersTask.Views
             _itemPool = new GenericObjectPool<ItemEntity>(_itemPrefab, 5, _itemContainer);
         }
 
-        public void DisplayItems(IEnumerable<DataItem> items)
+        public void DisplayItems(IEnumerable<DataItem> items, int currentPage, int totalPages)
         {
             var itemsToReturn = new List<ItemEntity>(_itemPool.ActiveItems);
             
@@ -42,6 +42,9 @@ namespace FunCraftersTask.Views
                 var itemEntity = _itemPool.Get();
                 itemEntity.Setup(itemList[i], i);
             }
+            
+            _previousButton.interactable = currentPage > 0;
+            _nextButton.interactable = currentPage < totalPages - 1;
         }
     }
 }

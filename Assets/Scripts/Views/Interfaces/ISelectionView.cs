@@ -8,6 +8,6 @@ namespace FunCraftersTask.Views
     {
         IObservable<Unit> OnNextClicked { get; }
         IObservable<Unit> OnPreviousClicked { get; }
-        void DisplayItems(IEnumerable<DataItem> items);
+        void DisplayItems(IEnumerable<DataItem> items, int currentPage, int totalPages);
     }
 }

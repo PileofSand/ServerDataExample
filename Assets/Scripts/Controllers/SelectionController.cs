@@ -85,7 +85,7 @@ namespace FunCraftersTask.Controllers
 
         private void UpdateView()
         {
-            _view.DisplayItems(_model.GetCurrentPageItems());
+            _view.DisplayItems(_model.GetCurrentPageItems(),_model.CurrentPageIndex, _model.TotalPages);
         }
 
         public void Dispose()
