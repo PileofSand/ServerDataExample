@@ -9,7 +9,8 @@ namespace FunCraftersTask.Utilities
         private readonly Stack<T> _pool = new Stack<T>();
         private readonly Transform _parent;
         private readonly List<T> _activeItems = new List<T>();
-
+        public IEnumerable<T> ActiveItems => _activeItems;
+        
         public GenericObjectPool(T prefab, int initialCapacity, Transform parent)
         {
             _prefab = prefab;
@@ -51,7 +52,5 @@ namespace FunCraftersTask.Utilities
             _pool.Push(createdObject);
             return createdObject;
         }
-
-        public IEnumerable<T> ActiveItems => _activeItems;
     }
 }

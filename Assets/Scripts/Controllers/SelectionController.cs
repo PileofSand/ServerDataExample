@@ -33,6 +33,7 @@ namespace FunCraftersTask.Controllers
         {
             try
             {
+                await _model.InitializeAsync();
                 await _model.LoadPage(0);
                 UpdateView();
             }

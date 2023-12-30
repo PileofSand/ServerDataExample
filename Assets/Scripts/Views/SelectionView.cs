@@ -29,20 +29,29 @@ namespace FunCraftersTask.Views
 
         public void DisplayItems(IEnumerable<DataItem> items, int currentPage, int totalPages)
         {
-            var itemsToReturn = new List<ItemEntity>(_itemPool.ActiveItems);
-            
-            foreach (var item in itemsToReturn)
-            {
-                _itemPool.Return(item);
-            }
-            
             var itemList = items.ToList();
+            var activeItemsList = _itemPool.ActiveItems.ToList();
+            var activeItemCount = activeItemsList.Count;
+            
             for (int i = 0; i < itemList.Count; i++)
             {
-                var itemEntity = _itemPool.Get();
+                ItemEntity itemEntity;
+                if (i < activeItemCount)
+                {
+                    itemEntity = activeItemsList[i];
+                }
+                else
+                {
+                    itemEntity = _itemPool.Get();
+                }
                 itemEntity.Setup(itemList[i], i);
             }
             
+            for (int i = itemList.Count; i < activeItemCount; i++)
+            {
+                _itemPool.Return(activeItemsList[i]);
+            }
+
             _previousButton.interactable = currentPage > 0;
             _nextButton.interactable = currentPage < totalPages - 1;
         }

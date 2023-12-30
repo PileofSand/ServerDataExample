@@ -15,10 +15,10 @@ namespace FunCraftersTask.Models
         private Dictionary<int, List<DataItem>> _pageCache = new Dictionary<int, List<DataItem>>();
         private CancellationTokenSource _cts;
         private const int PageSize = 5;
-        
-        public int TotalPages => TotalItems / PageSize;
         public int CurrentPageIndex { get; private set; } = 0;
         public int TotalItems { get; private set; }
+
+        public int TotalPages => (TotalItems / PageSize) + (TotalItems % PageSize > 0 ? 1 : 0);
 
         [Inject]
         public void Construct(IDataServer dataServer)
@@ -29,7 +29,6 @@ namespace FunCraftersTask.Models
         public void Initialize()
         {
             _cts = new CancellationTokenSource();
-            InitializeAsync();
         }
         
         public void Dispose()
@@ -38,7 +37,7 @@ namespace FunCraftersTask.Models
             _cts.Dispose();
         }
         
-        private async void InitializeAsync()
+        public async Task InitializeAsync()
         {
             try
             {
@@ -75,13 +74,20 @@ namespace FunCraftersTask.Models
         {
             if (!IsPageCached(pageIndex))
             {
-                _items = await _dataServer.RequestData(pageIndex * PageSize, PageSize, _cts.Token) as List<DataItem>;
+                int itemsToRequest = GetItemsCountForPage(pageIndex);
+                _items = await _dataServer.RequestData(pageIndex * PageSize, itemsToRequest, _cts.Token) as List<DataItem>;
                 CachePage(pageIndex, _items);
             }
             else
             {
                 _items = GetCachedPage(pageIndex);
             }
+        }
+
+        private int GetItemsCountForPage(int pageIndex)
+        {
+            int totalRemainingItems = TotalItems - pageIndex * PageSize;
+            return Math.Min(PageSize, totalRemainingItems);
         }
 
         private void PrefetchNextPage(int pageIndex)
