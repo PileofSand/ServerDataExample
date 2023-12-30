@@ -60,7 +60,6 @@ namespace FunCraftersTask.Models
             try
             {
                 await GetItemsAsync(pageIndex);
-                
                 SetPageIndex(pageIndex);
                 PrefetchNextPage(pageIndex);
             }
