@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace FunCraftersTask.Entities
 {
@@ -8,7 +7,6 @@ namespace FunCraftersTask.Entities
     {
         [SerializeField] private TextMeshProUGUI _numberText;
         [SerializeField] private TextMeshProUGUI _descriptionText;
-        // Add UI components references here
 
         public void Setup(DataItem data, int index)
         {
