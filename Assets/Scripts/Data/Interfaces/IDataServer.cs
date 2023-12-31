@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FunCraftersTask.Services.Server
+namespace FunCraftersTask.Data
 {
 	public interface IDataServer
 	{

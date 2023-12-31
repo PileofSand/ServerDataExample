@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Random = System.Random;
 
-namespace FunCraftersTask.Services.Server
+namespace FunCraftersTask.Data
 {
     public class DataServerMock : IDataServer
     {

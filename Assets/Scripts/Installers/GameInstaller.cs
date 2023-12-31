@@ -1,7 +1,7 @@
 using FunCraftersTask.Controllers;
 using FunCraftersTask.Entities;
 using FunCraftersTask.Models;
-using FunCraftersTask.Services.Server;
+using FunCraftersTask.Data;
 using FunCraftersTask.Utilities;
 using FunCraftersTask.Views;
 using UnityEngine;
